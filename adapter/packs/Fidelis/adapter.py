@@ -142,3 +142,24 @@ class FidelisAdapter(BaseAdapter):
     def get_host_details(self, hostname: str) -> Dict[str, Any]:
         response = self.client.get_host_info(host_name=hostname)
         return response.get("data", {}).get("entities", [{}])[0]
+
+    def list_alerts(self, limit: int = 10, start_date: str = None) -> List[MDRAlert]:
+        raw_response = self.client.list_alerts(limit=limit, start_date=start_date)
+        if raw_response is None:
+            return []
+        
+        data = raw_response.get("data")
+        if not data:
+             return []
+             
+        raw_alerts = data.get("entities", [])
+        
+        alerts = []
+        for raw in raw_alerts:
+            # 使用我們現有的 normalize_alert 方法轉換為統一格式
+            try:
+                alert = self.normalize_alert(raw)
+                alerts.append(alert)
+            except Exception:
+                continue
+        return alerts

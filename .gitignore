@@ -5,3 +5,10 @@ __pycache__/
 node_modules/
 dist/
 build/
+
+# Credentials
+fidelis_endpoint_password
+**/fidelis_endpoint_password
+gemini_api_key
+*.key
+*.pem
