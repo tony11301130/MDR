@@ -1,0 +1,23 @@
+{
+    "name": "VendorName",
+    "display_name": "Vendor Display Name",
+    "version": "1.0.0",
+    "description": "Brief description of this integration",
+    "vendor": "Vendor Company Name",
+    "categories": [
+        "EDR",
+        "Firewall",
+        "SIEM"
+    ],
+    "support": "community",
+    "required_config": [
+        "server_url",
+        "api_key"
+    ],
+    "capabilities": [
+        "fetch_alerts",
+        "get_host_info"
+    ],
+    "author": "Your Name",
+    "created": "YYYY-MM-DD"
+}

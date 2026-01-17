@@ -1,0 +1,29 @@
+{
+    "name": "Fidelis",
+    "display_name": "Fidelis Endpoint",
+    "version": "1.0.0",
+    "description": "Fidelis Endpoint EDR integration for MDR platform. Provides alert fetching, event querying, host isolation, and process termination capabilities.",
+    "vendor": "Fidelis Cybersecurity",
+    "categories": [
+        "EDR",
+        "Endpoint Security"
+    ],
+    "support": "community",
+    "required_config": [
+        "server_url",
+        "username",
+        "password",
+        "fidelis_isolate_script_id",
+        "fidelis_terminate_process_script_id"
+    ],
+    "capabilities": [
+        "fetch_alerts",
+        "query_events",
+        "isolate_host",
+        "terminate_process",
+        "get_host_info",
+        "list_processes"
+    ],
+    "author": "MDR Team",
+    "created": "2026-01-17"
+}

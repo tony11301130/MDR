@@ -1,0 +1,53 @@
+# 實作計畫 - 抽離 Fidelis Endpoint API 邏輯
+
+此計畫旨在將 Fidelis Endpoint API 的呼叫邏輯從 XSOAR 整合中抽離，並建立一個獨立的 Python 客戶端，用於後續 MDR 平台的測試與開發。
+
+## 擬議變更
+
+### Fidelis API 客戶端
+- [NEW] `fidelis_endpoint_client.py`: 一個獨立的 Python 類別，實作核心 Fidelis Endpoint API 方法。
+  - 身份驗證 (Bearer token)
+  - 獲取告警列表 (Alert Listing)
+  - 獲取端點資訊 (Host Information)
+  - 執行任務 (腳本執行、隔離等)
+  - 事件查詢 (Event Querying)
+
+### 測試腳本
+- [NEW] `Fidelis-Endpoint api test/test_fidelis_api.py`: 用於驗證獨立客戶端功能的腳本。
+  - 將從環境變數或檔案中讀取憑證。
+  - 執行連線測試 ([test_module](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisEndpoint/Integrations/FidelisEndpoint/FidelisEndpoint.py#566-574))。
+  - 獲取少量告警以驗證資料封裝。
+
+## 實作細節
+
+1.  **重構客戶端類別**:
+    - 使用 `requests` 函式庫取代 XSOAR 的 `BaseClient`。
+    - 移除 `demistomock` 與其他 XSOAR 專用引用。
+    - 實作具備錯誤處理與日誌記錄的 `_http_request`。
+    - 支援 SSL 驗證與 Proxy 設定。
+
+2.  **核心方法**:
+    - [__init__(self, server_url, username, password, verify=True, proxy=None)](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisEndpoint/Integrations/FidelisEndpoint/FidelisEndpoint.py#36-40)
+    - [login(self)](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisElevateNetwork/Integrations/FidelisElevateNetwork/FidelisElevateNetwork.py#84-99) (等同於 [_generate_token](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisEndpoint/Integrations/FidelisEndpoint/FidelisEndpoint.py#41-56))
+    - [list_alerts(self, limit=50, sort=None, start_date=None, end_date=None)](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisElevateNetwork/Integrations/FidelisElevateNetwork/FidelisElevateNetwork.py#723-768)
+    - [get_host_info(self, host_name=None, ip_address=None)](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisEndpoint/Integrations/FidelisEndpoint/FidelisEndpoint.py#72-93)
+    - [execute_script(self, script_id, endpoints, answer="", timeout=None)](file:///c:/Users/azijs/Documents/code/MDR/content/Packs/FidelisEndpoint/Integrations/FidelisEndpoint/FidelisEndpoint.py#132-167)
+    - `isolate_host(self, host_name_or_ip, os_type, allowed_server=None)`
+    - `unisolate_host(self, host_name_or_ip, os_type)`
+
+## 驗證計畫
+
+### 手動驗證
+- 請您提供正確的 `server_url`、`username` 與 `password` 以進行初次測試。
+- 我將執行 `test_fidelis_api.py` 並檢查輸出。
+- **執行指令**:
+  ```powershell
+  python "c:\Users\azijs\Documents\code\MDR\Fidelis-Endpoint api test\test_fidelis_api.py"
+  ```
+
+### 自動化測試
+- 使用 `responses` 或 `unittest.mock` 編寫單元測試，確保在沒有後端伺服器的情況下，邏輯仍能正確處理 API 回應。
+- **執行指令**:
+  ```powershell
+  pytest "c:\Users\azijs\Documents\code\MDR\Fidelis-Endpoint api test\test_client.py"
+  ```

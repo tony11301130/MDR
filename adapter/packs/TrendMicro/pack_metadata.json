@@ -1,0 +1,23 @@
+{
+    "name": "TrendMicro",
+    "display_name": "Trend Micro Apex One",
+    "version": "1.0.0",
+    "description": "Trend Micro Apex One EDR integration for MDR platform",
+    "vendor": "Trend Micro",
+    "categories": [
+        "EDR",
+        "Endpoint Security",
+        "Antivirus"
+    ],
+    "support": "community",
+    "required_config": [
+        "server_url",
+        "api_key"
+    ],
+    "capabilities": [
+        "fetch_alerts",
+        "get_host_info"
+    ],
+    "author": "MDR Team",
+    "created": "2026-01-17"
+}
